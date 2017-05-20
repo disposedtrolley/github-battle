@@ -1,5 +1,7 @@
 var React = require('react');
 var PropTypes = require('prop-types');
+var api = require('../utils/api');
+
 
 function SelectLanguage(props) {
   var languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python'];
@@ -32,18 +34,33 @@ class Popular extends React.Component {
   constructor(props) {
     super(props);   // always call super() with constructor params in React
     this.state = {
-      selectedLanguage: 'All'
+      selectedLanguage: 'All',
+      repos: null
     };
     // ensure updateLanguage is always bound to the correct context
     this.updateLanguage = this.updateLanguage.bind(this);
   }
 
+  componentDidMount() {
+    this.updateLanguage(this.state.selectedLanguage);
+  }
+
   updateLanguage(lang) {
     this.setState(function() {
       return {
-        selectedLanguage: lang
+        selectedLanguage: lang,
+        repos: null
       }
-    })
+    });
+
+    api.fetchPopularRepos(lang)
+      .then(function(repos) {
+        this.setState(function() {
+          return {
+            repos: repos
+          }
+        })
+      }.bind(this));    // explicitly bind "this".setState to the outer scope
   }
 
   render() {
@@ -52,6 +69,7 @@ class Popular extends React.Component {
         <SelectLanguage
           selectedLanguage={this.state.selectedLanguage}
           onSelect={this.updateLanguage} />
+        <RepoGrid repos={this.state.repos} />
       </div>
     )
   }
