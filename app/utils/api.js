@@ -3,21 +3,21 @@ var axios = require('axios');
 var params = '?'
 
 function getProfile(username) {
-  return axois.get('https://api.github.com/users/' + username)
+  return axios.get('https://api.github.com/users/' + username)
     .then(function(user) {
       return user.data;
     });  
 }
 
 function getRepos(username) {
-  return axois.get('https://api.github.com/users/' + username + '/repos' + params + 'per_page=100')
-    .then(function(user) {
-      return user.data;
+  return axios.get('https://api.github.com/users/' + username + '/repos' + params + 'per_page=100')
+    .then(function(repos) {
+      return repos.data;
     });  
 }
 
 function getStarCount(repos) {
-  return repos.data.reduce(function(count, repo) {
+  return repos.reduce(function(count, repo) {
     return count + repo.stargazers_count;
   }, 0)
 }
@@ -57,7 +57,7 @@ function sortPlayers(players) {
 
 module.exports = {
   battle: function(players) {
-    return axois.all(players.map(getUserData))
+    return axios.all(players.map(getUserData))
       .then(sortPlayers)
       .catch(handleError)
   },
