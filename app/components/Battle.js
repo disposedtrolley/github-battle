@@ -119,10 +119,13 @@ class Battle extends React.Component {
           {playerOneImage !== null &&
             <PlayerPreview
               avatar={playerOneImage}
-              username={playerOneName}
-              onReset={this.handleReset}
-              id='playerOne'
-            />}
+              username={playerOneName}>
+                <button
+                  className='reset'
+                  onClick={this.handleReset.bind(this, 'playerOne')}>
+                    Reset
+                </button>
+            </PlayerPreview>}
 
           {!playerTwoName &&
             <PlayerInput
@@ -134,10 +137,13 @@ class Battle extends React.Component {
           {playerTwoImage !== null &&
             <PlayerPreview
               avatar={playerTwoImage}
-              username={playerTwoName}
-              onReset={this.handleReset}
-              id='playerTwo'
-            />}
+              username={playerTwoName}>
+                <button
+                  className='reset'
+                  onClick={this.handleReset.bind(this, 'playerTwo')}>
+                    Reset
+                </button>
+            </PlayerPreview>}
         </div>
 
         {playerOneImage && playerTwoImage &&
